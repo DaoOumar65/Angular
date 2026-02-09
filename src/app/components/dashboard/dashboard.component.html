@@ -1,0 +1,123 @@
+<div class="dashboard">
+  <div class="dashboard-header">
+    <h2><i class="fas fa-chart-line"></i> Vue d'ensemble</h2>
+    <div class="period-selector">
+      <button 
+        [class.active]="selectedPeriod === 'day'"
+        (click)="setPeriod('day')"
+      >
+        <i class="fas fa-calendar-day"></i> Aujourd'hui
+      </button>
+      <button 
+        [class.active]="selectedPeriod === 'month'"
+        (click)="setPeriod('month')"
+      >
+        <i class="fas fa-calendar-alt"></i> Ce mois
+      </button>
+      <button 
+        [class.active]="selectedPeriod === 'year'"
+        (click)="setPeriod('year')"
+      >
+        <i class="fas fa-calendar"></i> Cette année
+      </button>
+    </div>
+  </div>
+
+  <!-- Cartes statistiques -->
+  <div class="stats-grid">
+    <div class="stat-card primary">
+      <div class="stat-icon">
+        <i class="fas fa-calendar-day"></i>
+      </div>
+      <div class="stat-content">
+        <p class="stat-label">Aujourd'hui</p>
+        <h3 class="stat-value">{{ totalToday | customCurrency }}</h3>
+      </div>
+    </div>
+
+    <div class="stat-card success">
+      <div class="stat-icon">
+        <i class="fas fa-calendar-check"></i>
+      </div>
+      <div class="stat-content">
+        <p class="stat-label">Ce mois</p>
+        <h3 class="stat-value">{{ totalMonth | customCurrency }}</h3>
+      </div>
+    </div>
+
+    <div class="stat-card warning">
+      <div class="stat-icon">
+        <i class="fas fa-chart-bar"></i>
+      </div>
+      <div class="stat-content">
+        <p class="stat-label">Cette année</p>
+        <h3 class="stat-value">{{ totalYear | customCurrency }}</h3>
+      </div>
+    </div>
+
+    <div class="stat-card info">
+      <div class="stat-icon">
+        <i class="fas fa-receipt"></i>
+      </div>
+      <div class="stat-content">
+        <p class="stat-label">Total dépenses</p>
+        <h3 class="stat-value">{{ expenseCount }}</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Graphiques et statistiques -->
+  <div class="charts-grid">
+    <!-- Dépenses par catégorie -->
+    <div class="chart-card">
+      <h3><i class="fas fa-chart-pie"></i> Dépenses par catégorie</h3>
+      <div *ngIf="categoryStats.length > 0" class="pie-chart-container">
+        <svg viewBox="0 0 200 200" class="pie-chart">
+          <ng-container *ngFor="let cat of categoryStats; let i = index">
+            <circle
+              cx="100"
+              cy="100"
+              r="80"
+              [attr.fill]="'none'"
+              [attr.stroke]="getCategoryColor(i)"
+              [attr.stroke-width]="40"
+              [attr.stroke-dasharray]="getCategoryPercentage(cat.total) * 5.03 + ' 502.4'"
+              [attr.stroke-dashoffset]="getCategoryOffset(i)"
+              [attr.transform]="'rotate(-90 100 100)'"
+            />
+          </ng-container>
+        </svg>
+        <div class="pie-legend">
+          <div *ngFor="let cat of categoryStats; let i = index" class="legend-item">
+            <span class="legend-color" [style.background-color]="getCategoryColor(i)"></span>
+            <div class="legend-info">
+              <span class="legend-name">{{ cat.category }}</span>
+              <span class="legend-value">{{ getCategoryPercentage(cat.total) | number:'1.0-1' }}%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="categoryStats.length === 0" class="empty-state">
+        <i class="fas fa-inbox"></i>
+        <p>Aucune dépense enregistrée</p>
+      </div>
+    </div>
+
+    <!-- Tendance mensuelle -->
+    <div class="chart-card">
+      <h3><i class="fas fa-chart-line"></i> Tendance des 6 derniers mois</h3>
+      <div class="trend-chart">
+        <div *ngFor="let item of monthlyTrend" class="trend-bar">
+          <div class="bar-container">
+            <div 
+              class="bar" 
+              [style.height.%]="monthlyTrend.length > 0 ? (item.total / monthlyTrend[0].total || 1) * 100 : 0"
+            ></div>
+          </div>
+          <span class="bar-label">{{ item.month }}</span>
+          <span class="bar-value">{{ item.total | customCurrency:0 }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

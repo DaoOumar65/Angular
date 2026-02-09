@@ -1,0 +1,48 @@
+<div class="categories">
+  <div class="categories-header">
+    <h2><i class="fas fa-tags"></i> Gestion des catégories</h2>
+  </div>
+
+  <div class="categories-grid">
+    <div 
+      *ngFor="let cat of categoryStats" 
+      class="category-card"
+      [class.selected]="selectedCategory === cat.category"
+      (click)="selectCategory(cat.category)"
+    >
+      <div class="card-header">
+        <i [class]="getCategoryIcon(cat.category)"></i>
+        <h3>{{ cat.category }}</h3>
+      </div>
+      <div class="card-body">
+        <div class="stat">
+          <span class="stat-label">Total</span>
+          <span class="stat-value">{{ cat.total | customCurrency }}</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Transactions</span>
+          <span class="stat-value">{{ cat.count }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="categoryStats.length === 0" class="empty-state">
+      <i class="fas fa-tags"></i>
+      <p>Aucune catégorie disponible</p>
+    </div>
+  </div>
+
+  <!-- Détails de la catégorie sélectionnée -->
+  <div *ngIf="selectedCategory" class="category-details">
+    <h3><i class="fas fa-list"></i> Dépenses - {{ selectedCategory }}</h3>
+    <div class="expenses-list">
+      <div *ngFor="let expense of filteredExpenses" class="expense-row">
+        <div class="expense-info">
+          <span class="expense-desc">{{ expense.description }}</span>
+          <span class="expense-date">{{ expense.date | date:'dd/MM/yyyy' }}</span>
+        </div>
+        <span class="expense-amount">{{ expense.amount | customCurrency }}</span>
+      </div>
+    </div>
+  </div>
+</div>

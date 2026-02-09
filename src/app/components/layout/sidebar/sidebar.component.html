@@ -1,0 +1,21 @@
+<aside class="sidebar">
+  <div class="menu">
+    <div 
+      *ngFor="let item of menuItems" 
+      class="menu-item"
+      [class.active]="isActive(item.id)"
+      (click)="selectMenu(item.id)"
+    >
+      <i [class]="item.icon + ' menu-icon'"></i>
+      <span class="menu-label">{{ item.label }}</span>
+    </div>
+  </div>
+  
+  <div class="sidebar-footer">
+    <div class="quick-stats">
+      <i class="fas fa-info-circle"></i>
+      <p class="stats-label">Version</p>
+      <p class="stats-value">1.0.0</p>
+    </div>
+  </div>
+</aside>

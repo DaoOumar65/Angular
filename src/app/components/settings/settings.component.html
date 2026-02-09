@@ -1,0 +1,65 @@
+<div class="settings">
+  <div class="settings-header">
+    <h2><i class="fas fa-cog"></i> Paramètres</h2>
+  </div>
+
+  <div class="settings-section">
+    <h3><i class="fas fa-database"></i> Données</h3>
+    <div class="setting-item">
+      <div class="setting-info">
+        <h4>Exporter les données</h4>
+        <p>Téléchargez toutes vos dépenses au format JSON</p>
+      </div>
+      <button class="btn-primary" (click)="exportData()">
+        <i class="fas fa-download"></i> Exporter
+      </button>
+    </div>
+    <div class="setting-item">
+      <div class="setting-info">
+        <h4>Nombre de dépenses</h4>
+        <p>Total des transactions enregistrées</p>
+      </div>
+      <span class="badge">{{ totalExpenses }}</span>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <h3><i class="fas fa-info-circle"></i> À propos</h3>
+    <div class="about-card">
+      <div class="about-item">
+        <i class="fas fa-code"></i>
+        <div>
+          <h4>Version</h4>
+          <p>1.0.0</p>
+        </div>
+      </div>
+      <div class="about-item">
+        <i class="fas fa-calendar"></i>
+        <div>
+          <h4>Dernière mise à jour</h4>
+          <p>{{ currentDate | date:'dd/MM/yyyy' }}</p>
+        </div>
+      </div>
+      <div class="about-item">
+        <i class="fab fa-angular"></i>
+        <div>
+          <h4>Framework</h4>
+          <p>Angular 19</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="settings-section danger-zone">
+    <h3><i class="fas fa-exclamation-triangle"></i> Zone dangereuse</h3>
+    <div class="setting-item">
+      <div class="setting-info">
+        <h4>Supprimer toutes les données</h4>
+        <p>Cette action est irréversible. Toutes vos dépenses seront supprimées.</p>
+      </div>
+      <button class="btn-danger" (click)="clearAllData()">
+        <i class="fas fa-trash"></i> Tout supprimer
+      </button>
+    </div>
+  </div>
+</div>

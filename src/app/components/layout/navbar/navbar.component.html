@@ -1,0 +1,27 @@
+<nav class="navbar">
+  <div class="navbar-brand">
+    <i class="fas fa-wallet logo-icon"></i>
+    <h1>Budget Tracker Pro</h1>
+  </div>
+  <div class="navbar-actions">
+    <div class="currency-selector">
+      <i class="fas fa-money-bill-wave"></i>
+      <select (change)="changeCurrency($event)" [value]="currentCurrency().code">
+        <option *ngFor="let currency of currencies" [value]="currency.code">
+          {{ currency.symbol }} - {{ currency.name }}
+        </option>
+      </select>
+    </div>
+    <div class="date-display">
+      <i class="far fa-calendar-alt"></i>
+      <span>{{ currentDate | date:'EEEE dd MMMM yyyy' }}</span>
+    </div>
+    <div class="user-profile">
+      <i class="far fa-user-circle"></i>
+      <span class="username">{{ currentUser()?.prenom }} {{ currentUser()?.nom }}</span>
+      <button class="logout-btn" (click)="logout()" title="Déconnexion">
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
+    </div>
+  </div>
+</nav>

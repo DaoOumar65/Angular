@@ -1,0 +1,59 @@
+<div class="expense-form">
+  <h2><i class="fas fa-plus-circle"></i> Ajouter une dépense</h2>
+  <form [formGroup]="expenseForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="description">
+        <i class="fas fa-align-left"></i> Description
+      </label>
+      <input 
+        type="text" 
+        id="description" 
+        formControlName="description"
+        placeholder="Ex: Courses du mois"
+      >
+      <span class="error" *ngIf="expenseForm.get('description')?.invalid && expenseForm.get('description')?.touched">
+        <i class="fas fa-exclamation-circle"></i> La description est requise
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label for="amount">
+        <i class="fas fa-euro-sign"></i> Montant (€)
+      </label>
+      <input 
+        type="number" 
+        id="amount" 
+        formControlName="amount"
+        step="0.01"
+        min="0"
+      >
+      <span class="error" *ngIf="expenseForm.get('amount')?.invalid && expenseForm.get('amount')?.touched">
+        <i class="fas fa-exclamation-circle"></i> Le montant doit être supérieur à 0
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label for="category">
+        <i class="fas fa-tag"></i> Catégorie
+      </label>
+      <select id="category" formControlName="category">
+        <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="date">
+        <i class="far fa-calendar"></i> Date
+      </label>
+      <input 
+        type="date" 
+        id="date" 
+        formControlName="date"
+      >
+    </div>
+
+    <button type="submit" [disabled]="expenseForm.invalid">
+      <i class="fas fa-check"></i> Ajouter la dépense
+    </button>
+  </form>
+</div>
