@@ -1,17 +1,22 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ExpenseService } from '../../services/expense.service';
+import { BudgetLimitService } from '../../services/budget-limit.service';
 
 @Component({
   selector: 'app-settings',
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.scss'
 })
 export class SettingsComponent {
   currentDate = new Date();
+  dailyLimit = 0;
 
-  constructor(private expenseService: ExpenseService) {}
+  constructor(private expenseService: ExpenseService, private budgetLimitService: BudgetLimitService) {
+    this.dailyLimit = this.budgetLimitService.getLimits()().daily;
+  }
 
   get totalExpenses() {
     return this.expenseService.getExpenses()().length;
@@ -27,6 +32,10 @@ export class SettingsComponent {
     a.download = `budget-tracker-${new Date().toISOString().split('T')[0]}.json`;
     a.click();
     window.URL.revokeObjectURL(url);
+  }
+
+  saveDailyLimit() {
+    this.budgetLimitService.setDailyLimit(this.dailyLimit);
   }
 
   clearAllData() {

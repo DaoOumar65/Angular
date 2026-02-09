@@ -31,7 +31,13 @@
       </div>
       <div class="stat-content">
         <p class="stat-label">Aujourd'hui</p>
-        <h3 class="stat-value">{{ totalToday | customCurrency }}</h3>
+        <h3 class="stat-value" [class.exceeded]="isDailyLimitExceeded()">{{ totalToday | customCurrency }}</h3>
+        <div *ngIf="dailyLimit > 0" class="limit-progress">
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="dailyProgress" [class.exceeded]="isDailyLimitExceeded()"></div>
+          </div>
+          <span class="limit-text">{{ dailyProgress | number:'1.0-0' }}% de {{ dailyLimit | customCurrency }}</span>
+        </div>
       </div>
     </div>
 

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ExpenseService } from '../../services/expense.service';
+import { BudgetLimitService } from '../../services/budget-limit.service';
 import { CustomCurrencyPipe } from '../../pipes/custom-currency.pipe';
 
 @Component({
@@ -13,7 +14,7 @@ export class DashboardComponent {
   selectedPeriod: 'day' | 'month' | 'year' = 'month';
   currentDate = new Date();
 
-  constructor(public expenseService: ExpenseService) {}
+  constructor(public expenseService: ExpenseService, public budgetLimitService: BudgetLimitService) {}
 
   get totalToday() {
     return this.expenseService.getTotalByPeriod('day', this.currentDate);
@@ -45,6 +46,19 @@ export class DashboardComponent {
 
   get totalExpenses() {
     return this.expenseService.getTotalExpenses();
+  }
+
+  get dailyLimit() {
+    return this.budgetLimitService.getLimits()().daily;
+  }
+
+  get dailyProgress() {
+    if (this.dailyLimit === 0) return 0;
+    return (this.totalToday / this.dailyLimit) * 100;
+  }
+
+  isDailyLimitExceeded(): boolean {
+    return this.dailyLimit > 0 && this.totalToday > this.dailyLimit;
   }
 
   getCategoryOffset(index: number): number {
