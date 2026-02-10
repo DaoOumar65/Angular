@@ -1,6 +1,46 @@
 <div class="categories">
   <div class="categories-header">
     <h2><i class="fas fa-tags"></i> Gestion des catégories</h2>
+    <button class="btn-add" (click)="showAddForm = !showAddForm">
+      <i class="fas fa-plus"></i> Nouvelle catégorie
+    </button>
+  </div>
+
+  <div *ngIf="showAddForm" class="add-form">
+    <input [(ngModel)]="newCategoryName" placeholder="Nom de la catégorie" (keyup.enter)="addCategory()">
+    <button class="btn-save" (click)="addCategory()">
+      <i class="fas fa-check"></i>
+    </button>
+    <button class="btn-cancel" (click)="showAddForm = false; newCategoryName = ''">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+
+  <div class="categories-list">
+    <div *ngFor="let cat of categoryService.getCategories()()" class="category-item">
+      <div *ngIf="editingCategory !== cat" class="category-view">
+        <i [class]="getCategoryIcon(cat)"></i>
+        <span class="category-name">{{ cat }}</span>
+        <span class="category-badge" *ngIf="isDefaultCategory(cat)">Par défaut</span>
+        <div class="category-actions">
+          <button class="btn-edit" (click)="startEdit(cat)">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button class="btn-delete" (click)="deleteCategory(cat)" [disabled]="isDefaultCategory(cat)">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </div>
+      <div *ngIf="editingCategory === cat" class="category-edit">
+        <input [(ngModel)]="editCategoryName" (keyup.enter)="saveEdit()">
+        <button class="btn-save" (click)="saveEdit()">
+          <i class="fas fa-check"></i>
+        </button>
+        <button class="btn-cancel" (click)="cancelEdit()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
   </div>
 
   <div class="categories-grid">
@@ -29,20 +69,6 @@
     <div *ngIf="categoryStats.length === 0" class="empty-state">
       <i class="fas fa-tags"></i>
       <p>Aucune catégorie disponible</p>
-    </div>
-  </div>
-
-  <!-- Détails de la catégorie sélectionnée -->
-  <div *ngIf="selectedCategory" class="category-details">
-    <h3><i class="fas fa-list"></i> Dépenses - {{ selectedCategory }}</h3>
-    <div class="expenses-list">
-      <div *ngFor="let expense of filteredExpenses" class="expense-row">
-        <div class="expense-info">
-          <span class="expense-desc">{{ expense.description }}</span>
-          <span class="expense-date">{{ expense.date | date:'dd/MM/yyyy' }}</span>
-        </div>
-        <span class="expense-amount">{{ expense.amount | customCurrency }}</span>
-      </div>
     </div>
   </div>
 </div>

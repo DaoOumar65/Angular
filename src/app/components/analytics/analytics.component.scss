@@ -50,6 +50,22 @@
   font-size: 1.5rem;
 }
 
+.stat-box.comparison.positive i {
+  color: var(--success-color);
+}
+
+.stat-box.comparison.negative i {
+  color: var(--danger-color);
+}
+
+.stat-box.comparison.positive h3 {
+  color: var(--success-color);
+}
+
+.stat-box.comparison.negative h3 {
+  color: var(--danger-color);
+}
+
 .chart-section {
   background: var(--bg-primary);
   padding: 1.5rem;

@@ -22,6 +22,13 @@ export class ExpenseService {
     this.saveToLocalStorage();
   }
 
+  updateExpense(id: string, expense: Omit<Expense, 'id'>) {
+    this.expenses.update(expenses => 
+      expenses.map(e => e.id === id ? { ...expense, id } : e)
+    );
+    this.saveToLocalStorage();
+  }
+
   deleteExpense(id: string) {
     this.expenses.update(expenses => expenses.filter(e => e.id !== id));
     this.saveToLocalStorage();
@@ -88,6 +95,14 @@ export class ExpenseService {
     }
     
     return result;
+  }
+
+  getComparison(): { current: number; previous: number; change: number } {
+    const now = new Date();
+    const current = this.getTotalByPeriod('month', now);
+    const previous = this.getTotalByPeriod('month', new Date(now.getFullYear(), now.getMonth() - 1, 1));
+    const change = previous > 0 ? ((current - previous) / previous) * 100 : 0;
+    return { current, previous, change };
   }
 
   private saveToLocalStorage() {

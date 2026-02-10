@@ -37,6 +37,10 @@ export class AnalyticsComponent {
     return stats.reduce((max, cat) => cat.total > max.total ? cat : max);
   }
 
+  get comparison() {
+    return this.expenseService.getComparison();
+  }
+
   getCategoryIcon(category: string): string {
     const icons: { [key: string]: string } = {
       'Alimentation': 'fas fa-utensils',

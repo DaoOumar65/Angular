@@ -1,18 +1,28 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ExpenseService } from '../../services/expense.service';
+import { CategoryService } from '../../services/category.service';
 import { CustomCurrencyPipe } from '../../pipes/custom-currency.pipe';
+import { ExpenseCategory } from '../../models/expense.model';
 
 @Component({
   selector: 'app-categories',
-  imports: [CommonModule, CustomCurrencyPipe],
+  imports: [CommonModule, CustomCurrencyPipe, FormsModule],
   templateUrl: './categories.component.html',
   styleUrl: './categories.component.scss'
 })
 export class CategoriesComponent {
   selectedCategory: string | null = null;
+  editingCategory: ExpenseCategory | null = null;
+  newCategoryName = '';
+  editCategoryName = '';
+  showAddForm = false;
 
-  constructor(public expenseService: ExpenseService) {}
+  constructor(
+    public expenseService: ExpenseService,
+    public categoryService: CategoryService
+  ) {}
 
   get categoryStats() {
     return this.expenseService.getExpensesByCategory();
@@ -25,6 +35,42 @@ export class CategoriesComponent {
 
   selectCategory(category: string) {
     this.selectedCategory = this.selectedCategory === category ? null : category;
+  }
+
+  addCategory() {
+    if (this.newCategoryName.trim()) {
+      this.categoryService.addCategory(this.newCategoryName.trim() as ExpenseCategory);
+      this.newCategoryName = '';
+      this.showAddForm = false;
+    }
+  }
+
+  startEdit(category: ExpenseCategory) {
+    this.editingCategory = category;
+    this.editCategoryName = category;
+  }
+
+  saveEdit() {
+    if (this.editingCategory && this.editCategoryName.trim()) {
+      this.categoryService.updateCategory(this.editingCategory, this.editCategoryName.trim() as ExpenseCategory);
+      this.editingCategory = null;
+      this.editCategoryName = '';
+    }
+  }
+
+  cancelEdit() {
+    this.editingCategory = null;
+    this.editCategoryName = '';
+  }
+
+  deleteCategory(category: ExpenseCategory) {
+    if (confirm(`Supprimer la catégorie "${category}" ?`)) {
+      this.categoryService.deleteCategory(category);
+    }
+  }
+
+  isDefaultCategory(category: ExpenseCategory): boolean {
+    return this.categoryService.isDefaultCategory(category);
   }
 
   getCategoryIcon(category: string): string {

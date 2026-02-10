@@ -1,14 +1,29 @@
 <div class="expense-list">
   <h2><i class="fas fa-list"></i> Liste des dépenses</h2>
   
-  <div *ngIf="expenses().length === 0" class="empty-state">
+  <div class="filters">
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input type="text" [(ngModel)]="searchTerm" placeholder="Rechercher une dépense...">
+    </div>
+    <select [(ngModel)]="selectedCategory" class="filter-select">
+      <option value="">Toutes les catégories</option>
+      <option *ngFor="let cat of categoryService.getCategories()()" [value]="cat">{{ cat }}</option>
+    </select>
+    <select [(ngModel)]="sortBy" class="filter-select">
+      <option value="date">Trier par date</option>
+      <option value="amount">Trier par montant</option>
+    </select>
+  </div>
+  
+  <div *ngIf="expenses.length === 0" class="empty-state">
     <i class="fas fa-inbox"></i>
     <p>Aucune dépense enregistrée</p>
   </div>
 
-  <div *ngIf="expenses().length > 0" class="expenses">
-    <div *ngFor="let expense of expenses()" class="expense-item">
-      <div class="expense-info">
+  <div *ngIf="expenses.length > 0" class="expenses">
+    <div *ngFor="let expense of expenses" class="expense-item">
+      <div *ngIf="editingExpense?.id !== expense.id" class="expense-info">
         <div class="expense-header">
           <i [class]="getCategoryIcon(expense.category)"></i>
           <h3>{{ expense.description }}</h3>
@@ -25,9 +40,25 @@
           </span>
         </div>
       </div>
-      <button class="delete-btn" (click)="deleteExpense(expense.id)">
-        <i class="fas fa-trash-alt"></i>
-      </button>
+      <div *ngIf="editingExpense?.id === expense.id && editingExpense" class="expense-edit">
+        <input [(ngModel)]="editingExpense.description" placeholder="Description">
+        <input type="number" [(ngModel)]="editingExpense.amount" placeholder="Montant">
+        <input type="date" [(ngModel)]="editingExpense.date">
+      </div>
+      <div class="expense-actions">
+        <button *ngIf="editingExpense?.id !== expense.id" class="edit-btn" (click)="editExpense(expense)">
+          <i class="fas fa-edit"></i>
+        </button>
+        <button *ngIf="editingExpense?.id === expense.id" class="save-btn" (click)="saveEdit()">
+          <i class="fas fa-check"></i>
+        </button>
+        <button *ngIf="editingExpense?.id === expense.id" class="cancel-btn" (click)="cancelEdit()">
+          <i class="fas fa-times"></i>
+        </button>
+        <button *ngIf="editingExpense?.id !== expense.id" class="delete-btn" (click)="deleteExpense(expense.id)">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+      </div>
     </div>
   </div>
 </div>

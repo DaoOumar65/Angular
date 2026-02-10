@@ -18,7 +18,7 @@
 
     <div class="form-group">
       <label for="amount">
-        <i class="fas fa-euro-sign"></i> Montant (€)
+        <i class="fas fa-euro-sign"></i> Montant ({{ currencyService.getCurrentCurrency()().symbol }})
       </label>
       <input 
         type="number" 
@@ -37,7 +37,7 @@
         <i class="fas fa-tag"></i> Catégorie
       </label>
       <select id="category" formControlName="category">
-        <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+        <option *ngFor="let cat of categoryService.getCategories()()" [value]="cat">{{ cat }}</option>
       </select>
     </div>
 

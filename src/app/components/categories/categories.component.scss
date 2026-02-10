@@ -11,6 +11,175 @@
   gap: 0.75rem;
 }
 
+.categories-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.btn-add {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  transition: all var(--transition-normal);
+}
+
+.btn-add:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+.add-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: var(--gray-50);
+  border-radius: var(--border-radius-md);
+}
+
+.add-form input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid var(--gray-300);
+  border-radius: var(--border-radius-md);
+  font-size: 1rem;
+}
+
+.add-form input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.categories-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.category-item {
+  background: var(--bg-primary);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius-md);
+  padding: 1rem;
+}
+
+.category-view {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.category-view i {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  width: 30px;
+}
+
+.category-name {
+  flex: 1;
+  font-weight: 600;
+  color: var(--gray-800);
+}
+
+.category-badge {
+  padding: 0.25rem 0.75rem;
+  background: var(--info-light);
+  color: var(--info-color);
+  border-radius: var(--border-radius-lg);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.category-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-edit, .btn-delete, .btn-save, .btn-cancel {
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-edit {
+  background: var(--info-light);
+  color: var(--info-color);
+}
+
+.btn-edit:hover {
+  background: var(--info-color);
+  color: white;
+}
+
+.btn-delete {
+  background: var(--danger-light);
+  color: var(--danger-color);
+}
+
+.btn-delete:hover:not(:disabled) {
+  background: var(--danger-color);
+  color: white;
+}
+
+.btn-delete:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-save {
+  background: var(--success-light);
+  color: var(--success-color);
+}
+
+.btn-save:hover {
+  background: var(--success-color);
+  color: white;
+}
+
+.btn-cancel {
+  background: var(--gray-200);
+  color: var(--gray-600);
+}
+
+.btn-cancel:hover {
+  background: var(--gray-400);
+  color: white;
+}
+
+.category-edit {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.category-edit input {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid var(--gray-300);
+  border-radius: var(--border-radius-md);
+  font-size: 1rem;
+}
+
+.category-edit input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
 .categories-header h2 i {
   color: var(--primary-color);
 }

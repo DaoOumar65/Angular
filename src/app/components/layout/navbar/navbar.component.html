@@ -16,6 +16,9 @@
       <i class="far fa-calendar-alt"></i>
       <span>{{ currentDate | date:'EEEE dd MMMM yyyy' }}</span>
     </div>
+    <button class="theme-toggle" (click)="toggleTheme()" [title]="themeService.getTheme()() ? 'Mode clair' : 'Mode sombre'">
+      <i [class]="themeService.getTheme()() ? 'fas fa-sun' : 'fas fa-moon'"></i>
+    </button>
     <div class="user-profile">
       <i class="far fa-user-circle"></i>
       <span class="username">{{ currentUser()?.prenom }} {{ currentUser()?.nom }}</span>

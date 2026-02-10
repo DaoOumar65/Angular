@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CurrencyService } from '../../../services/currency.service';
 import { AuthService } from '../../../services/auth.service';
+import { ThemeService } from '../../../services/theme.service';
 
 @Component({
   selector: 'app-navbar',
@@ -14,7 +15,8 @@ export class NavbarComponent {
 
   constructor(
     public currencyService: CurrencyService,
-    public authService: AuthService
+    public authService: AuthService,
+    public themeService: ThemeService
   ) {}
 
   get currencies() {
@@ -38,5 +40,9 @@ export class NavbarComponent {
     if (confirm('Voulez-vous vraiment vous déconnecter ?')) {
       this.authService.logout();
     }
+  }
+
+  toggleTheme() {
+    this.themeService.toggleTheme();
   }
 }

@@ -26,6 +26,13 @@
         <h3>{{ highestCategory.category }}</h3>
       </div>
     </div>
+    <div class="stat-box comparison" [class.positive]="comparison.change < 0" [class.negative]="comparison.change > 0">
+      <i [class]="comparison.change < 0 ? 'fas fa-arrow-down' : 'fas fa-arrow-up'"></i>
+      <div>
+        <p class="stat-label">vs mois précédent</p>
+        <h3>{{ comparison.change | number:'1.0-1' }}%</h3>
+      </div>
+    </div>
   </div>
 
   <!-- Répartition par catégorie -->
