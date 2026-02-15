@@ -1,0 +1,16 @@
+.app-layout {
+  display: flex;
+  background: var(--bg-secondary);
+  min-height: calc(100vh - 73px);
+}
+
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  .app-layout {
+    flex-direction: column;
+  }
+}

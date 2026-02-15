@@ -1,40 +1,40 @@
-<div class="expense-form">
-  <h2><i class="fas fa-plus-circle"></i> Ajouter une dépense</h2>
+﻿<div class="expense-form">
+  <h2><i class="fas fa-plus-circle"></i> Ajouter une depense</h2>
   <form [formGroup]="expenseForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <label for="description">
         <i class="fas fa-align-left"></i> Description
       </label>
-      <input 
-        type="text" 
-        id="description" 
+      <input
+        type="text"
+        id="description"
         formControlName="description"
         placeholder="Ex: Courses du mois"
       >
       <span class="error" *ngIf="expenseForm.get('description')?.invalid && expenseForm.get('description')?.touched">
-        <i class="fas fa-exclamation-circle"></i> La description est requise
+        Description requise (100 caracteres max)
       </span>
     </div>
 
     <div class="form-group">
       <label for="amount">
-        <i class="fas fa-euro-sign"></i> Montant ({{ currencyService.getCurrentCurrency()().symbol }})
+        <i class="fas fa-money-bill-wave"></i> Montant ({{ currencyService.getCurrentCurrency()().symbol }})
       </label>
-      <input 
-        type="number" 
-        id="amount" 
+      <input
+        type="number"
+        id="amount"
         formControlName="amount"
         step="0.01"
         min="0"
       >
       <span class="error" *ngIf="expenseForm.get('amount')?.invalid && expenseForm.get('amount')?.touched">
-        <i class="fas fa-exclamation-circle"></i> Le montant doit être supérieur à 0
+        Le montant doit etre entre 0.01 et 10 000 000
       </span>
     </div>
 
     <div class="form-group">
       <label for="category">
-        <i class="fas fa-tag"></i> Catégorie
+        <i class="fas fa-tag"></i> Categorie
       </label>
       <select id="category" formControlName="category">
         <option *ngFor="let cat of categoryService.getCategories()()" [value]="cat">{{ cat }}</option>
@@ -45,15 +45,45 @@
       <label for="date">
         <i class="far fa-calendar"></i> Date
       </label>
-      <input 
-        type="date" 
-        id="date" 
+      <input
+        type="date"
+        id="date"
         formControlName="date"
+        [max]="maxDate"
       >
     </div>
 
+    <div class="form-group">
+      <label for="recurrence">
+        <i class="fas fa-redo"></i> Recurrence
+      </label>
+      <select id="recurrence" formControlName="recurrence">
+        <option value="none">Aucune</option>
+        <option value="daily">Quotidienne</option>
+        <option value="weekly">Hebdomadaire</option>
+        <option value="monthly">Mensuelle</option>
+      </select>
+    </div>
+
+    <div class="form-group" *ngIf="expenseForm.value.recurrence !== 'none'">
+      <label for="recurrenceEndDate">
+        <i class="far fa-calendar-check"></i> Fin de recurrence
+      </label>
+      <input
+        type="date"
+        id="recurrenceEndDate"
+        formControlName="recurrenceEndDate"
+        [min]="expenseForm.value.date"
+      >
+      <small class="help-text">Laissez vide pour une seule occurrence.</small>
+    </div>
+
     <button type="submit" [disabled]="expenseForm.invalid">
-      <i class="fas fa-check"></i> Ajouter la dépense
+      <i class="fas fa-check"></i> Ajouter la depense
     </button>
+
+    <p class="error" *ngIf="submitError">{{ submitError }}</p>
+    <p class="help-text" *ngIf="submitSuccess">{{ submitSuccess }}</p>
   </form>
 </div>
+

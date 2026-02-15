@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+﻿import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ExpenseService } from '../../services/expense.service';
-import { BudgetLimitService } from '../../services/budget-limit.service';
+import { BudgetService } from '../../services/budget.service';
+import { CategoryService } from '../../services/category.service';
 import { CustomCurrencyPipe } from '../../pipes/custom-currency.pipe';
 
 @Component({
@@ -11,13 +12,21 @@ import { CustomCurrencyPipe } from '../../pipes/custom-currency.pipe';
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent {
-  selectedPeriod: 'day' | 'month' | 'year' = 'month';
+  selectedPeriod: 'day' | 'week' | 'month' | 'year' = 'month';
   currentDate = new Date();
 
-  constructor(public expenseService: ExpenseService, public budgetLimitService: BudgetLimitService) {}
+  constructor(
+    public expenseService: ExpenseService,
+    public budgetService: BudgetService,
+    private categoryService: CategoryService
+  ) {}
 
   get totalToday() {
     return this.expenseService.getTotalByPeriod('day', this.currentDate);
+  }
+
+  get totalWeek() {
+    return this.expenseService.getTotalByPeriod('week', this.currentDate);
   }
 
   get totalMonth() {
@@ -40,25 +49,46 @@ export class DashboardComponent {
     return this.expenseService.getMonthlyTrend(6);
   }
 
-  setPeriod(period: 'day' | 'month' | 'year') {
-    this.selectedPeriod = period;
-  }
-
   get totalExpenses() {
     return this.expenseService.getTotalExpenses();
   }
 
-  get dailyLimit() {
-    return this.budgetLimitService.getLimits()().daily;
+  get dayBudgetStatus() {
+    return this.budgetService.getBudgetStatus('daily', this.totalToday);
   }
 
-  get dailyProgress() {
-    if (this.dailyLimit === 0) return 0;
-    return (this.totalToday / this.dailyLimit) * 100;
+  get weekBudgetStatus() {
+    return this.budgetService.getBudgetStatus('weekly', this.totalWeek);
   }
 
-  isDailyLimitExceeded(): boolean {
-    return this.dailyLimit > 0 && this.totalToday > this.dailyLimit;
+  get monthBudgetStatus() {
+    return this.budgetService.getBudgetStatus('monthly', this.totalMonth);
+  }
+
+  get forecastEndMonth() {
+    return this.expenseService.forecastEndOfMonthTotal(this.currentDate);
+  }
+
+  get estimatedSavings() {
+    return this.budgetService.getMonthlySavingsGoal()() - this.forecastEndMonth;
+  }
+
+  setPeriod(period: 'day' | 'week' | 'month' | 'year') {
+    this.selectedPeriod = period;
+  }
+
+  get selectedPeriodStatus() {
+    if (this.selectedPeriod === 'day') return this.dayBudgetStatus;
+    if (this.selectedPeriod === 'week') return this.weekBudgetStatus;
+    if (this.selectedPeriod === 'month') return this.monthBudgetStatus;
+    return {
+      budgetAmount: 0,
+      spentAmount: this.totalYear,
+      remainingAmount: 0,
+      percentageUsed: 0,
+      status: 'safe' as const,
+      isOverBudget: false
+    };
   }
 
   getCategoryOffset(index: number): number {
@@ -66,12 +96,20 @@ export class DashboardComponent {
     for (let i = 0; i < index; i++) {
       offset += this.getCategoryPercentage(this.categoryStats[i].total);
     }
-    return -502.4 * offset / 100;
+    return (-502.4 * offset) / 100;
   }
 
   getCategoryPercentage(total: number): number {
     const totalExp = this.totalExpenses;
     return totalExp > 0 ? (total / totalExp) * 100 : 0;
+  }
+
+  getTrendBarHeight(total: number): number {
+    const values = this.monthlyTrend.map((item) => item.total);
+    const max = Math.max(...values, 0);
+    if (max <= 0) return 0;
+    const raw = (total / max) * 100;
+    return Math.max(0, Math.min(raw, 100));
   }
 
   getCategoryColor(index: number): string {
@@ -80,14 +118,7 @@ export class DashboardComponent {
   }
 
   getCategoryIcon(category: string): string {
-    const icons: { [key: string]: string } = {
-      'Alimentation': 'fas fa-utensils',
-      'Transport': 'fas fa-car',
-      'Loisirs': 'fas fa-gamepad',
-      'Santé': 'fas fa-heartbeat',
-      'Logement': 'fas fa-home',
-      'Autre': 'fas fa-ellipsis-h'
-    };
-    return icons[category] || 'fas fa-circle';
+    return this.categoryService.getCategoryIcon(category);
   }
 }
+

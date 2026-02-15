@@ -1,27 +1,36 @@
-<div class="expense-list">
-  <h2><i class="fas fa-list"></i> Liste des dépenses</h2>
-  
+﻿<div class="expense-list">
+  <h2><i class="fas fa-list"></i> Liste des depenses</h2>
+
   <div class="filters">
     <div class="search-box">
       <i class="fas fa-search"></i>
-      <input type="text" [(ngModel)]="searchTerm" placeholder="Rechercher une dépense...">
+      <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="onFiltersChanged()" placeholder="Rechercher une depense...">
     </div>
-    <select [(ngModel)]="selectedCategory" class="filter-select">
-      <option value="">Toutes les catégories</option>
+    <select [(ngModel)]="selectedCategory" (ngModelChange)="onFiltersChanged()" class="filter-select">
+      <option value="">Toutes les categories</option>
       <option *ngFor="let cat of categoryService.getCategories()()" [value]="cat">{{ cat }}</option>
     </select>
-    <select [(ngModel)]="sortBy" class="filter-select">
+    <select [(ngModel)]="sortBy" (ngModelChange)="onFiltersChanged()" class="filter-select">
       <option value="date">Trier par date</option>
       <option value="amount">Trier par montant</option>
+      <option value="category">Trier par categorie</option>
     </select>
   </div>
-  
-  <div *ngIf="expenses.length === 0" class="empty-state">
-    <i class="fas fa-inbox"></i>
-    <p>Aucune dépense enregistrée</p>
+
+  <div class="filters advanced">
+    <input type="date" class="filter-select" [(ngModel)]="startDate" (ngModelChange)="onFiltersChanged()">
+    <input type="date" class="filter-select" [(ngModel)]="endDate" (ngModelChange)="onFiltersChanged()">
+    <input type="number" class="filter-select" placeholder="Montant min" [(ngModel)]="minAmount" (ngModelChange)="onFiltersChanged()">
+    <input type="number" class="filter-select" placeholder="Montant max" [(ngModel)]="maxAmount" (ngModelChange)="onFiltersChanged()">
+    <button class="reset-btn" (click)="resetFilters()"><i class="fas fa-undo"></i> Reset</button>
   </div>
 
-  <div *ngIf="expenses.length > 0" class="expenses">
+  <div *ngIf="filteredExpenses.length === 0" class="empty-state">
+    <i class="fas fa-inbox"></i>
+    <p>Aucune depense enregistree</p>
+  </div>
+
+  <div *ngIf="filteredExpenses.length > 0" class="expenses">
     <div *ngFor="let expense of expenses" class="expense-item">
       <div *ngIf="editingExpense?.id !== expense.id" class="expense-info">
         <div class="expense-header">
@@ -61,4 +70,15 @@
       </div>
     </div>
   </div>
+
+  <div class="pagination" *ngIf="filteredExpenses.length > pageSize">
+    <button class="page-btn" (click)="previousPage()" [disabled]="currentPage === 1">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    <span>Page {{ currentPage }} / {{ totalPages }}</span>
+    <button class="page-btn" (click)="nextPage()" [disabled]="currentPage === totalPages">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+  </div>
 </div>
+

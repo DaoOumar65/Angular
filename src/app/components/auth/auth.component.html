@@ -1,27 +1,26 @@
-<div class="auth-container">
+﻿<div class="auth-container">
   <div class="auth-card">
     <div class="auth-header">
       <i class="fas fa-wallet"></i>
       <h1>Budget Tracker Pro</h1>
-      <p>Gérez vos finances intelligemment</p>
+      <p>Gerez vos finances intelligemment</p>
     </div>
 
     <div class="auth-tabs">
-      <button 
-        [class.active]="isLoginMode" 
+      <button
+        [class.active]="isLoginMode"
         (click)="toggleMode()"
       >
         <i class="fas fa-sign-in-alt"></i> Connexion
       </button>
-      <button 
-        [class.active]="!isLoginMode" 
+      <button
+        [class.active]="!isLoginMode"
         (click)="toggleMode()"
       >
         <i class="fas fa-user-plus"></i> Inscription
       </button>
     </div>
 
-    <!-- Messages -->
     <div *ngIf="errorMessage" class="message error-message">
       <i class="fas fa-exclamation-circle"></i>
       {{ errorMessage }}
@@ -31,21 +30,20 @@
       {{ successMessage }}
     </div>
 
-    <!-- Formulaire de connexion -->
     <form *ngIf="isLoginMode" [formGroup]="loginForm" (ngSubmit)="onLogin()" class="auth-form">
       <div class="form-group">
         <label for="login-telephone">
-          <i class="fas fa-phone"></i> Téléphone
+          <i class="fas fa-phone"></i> Telephone
         </label>
-        <input 
-          type="tel" 
-          id="login-telephone" 
+        <input
+          type="tel"
+          id="login-telephone"
           formControlName="telephone"
           placeholder="Ex: 12345678"
           maxlength="8"
         >
         <span class="error" *ngIf="loginForm.get('telephone')?.invalid && loginForm.get('telephone')?.touched">
-          Numéro de téléphone invalide (8 chiffres)
+          Numero de telephone invalide (8 chiffres)
         </span>
       </div>
 
@@ -53,31 +51,30 @@
         <label for="login-password">
           <i class="fas fa-lock"></i> Mot de passe
         </label>
-        <input 
-          type="password" 
-          id="login-password" 
+        <input
+          type="password"
+          id="login-password"
           formControlName="password"
           placeholder="Entrez votre mot de passe"
         >
         <span class="error" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
-          Le mot de passe doit contenir au moins 4 caractères
+          Le mot de passe doit contenir au moins 4 caracteres
         </span>
       </div>
 
-      <button type="submit" [disabled]="loginForm.invalid" class="submit-btn">
+      <button type="submit" [disabled]="loginForm.invalid || isSubmitting" class="submit-btn">
         <i class="fas fa-sign-in-alt"></i> Se connecter
       </button>
     </form>
 
-    <!-- Formulaire d'inscription -->
     <form *ngIf="!isLoginMode" [formGroup]="registerForm" (ngSubmit)="onRegister()" class="auth-form">
       <div class="form-group">
         <label for="register-nom">
           <i class="fas fa-user"></i> Nom
         </label>
-        <input 
-          type="text" 
-          id="register-nom" 
+        <input
+          type="text"
+          id="register-nom"
           formControlName="nom"
           placeholder="Entrez votre nom"
         >
@@ -88,32 +85,32 @@
 
       <div class="form-group">
         <label for="register-prenom">
-          <i class="fas fa-user"></i> Prénom
+          <i class="fas fa-user"></i> Prenom
         </label>
-        <input 
-          type="text" 
-          id="register-prenom" 
+        <input
+          type="text"
+          id="register-prenom"
           formControlName="prenom"
-          placeholder="Entrez votre prénom"
+          placeholder="Entrez votre prenom"
         >
         <span class="error" *ngIf="registerForm.get('prenom')?.invalid && registerForm.get('prenom')?.touched">
-          Le prénom est requis
+          Le prenom est requis
         </span>
       </div>
 
       <div class="form-group">
         <label for="register-telephone">
-          <i class="fas fa-phone"></i> Téléphone
+          <i class="fas fa-phone"></i> Telephone
         </label>
-        <input 
-          type="tel" 
-          id="register-telephone" 
+        <input
+          type="tel"
+          id="register-telephone"
           formControlName="telephone"
           placeholder="Ex: 12345678"
           maxlength="8"
         >
         <span class="error" *ngIf="registerForm.get('telephone')?.invalid && registerForm.get('telephone')?.touched">
-          Numéro de téléphone invalide (8 chiffres)
+          Numero de telephone invalide (8 chiffres)
         </span>
       </div>
 
@@ -121,24 +118,24 @@
         <label for="register-password">
           <i class="fas fa-lock"></i> Mot de passe
         </label>
-        <input 
-          type="password" 
-          id="register-password" 
+        <input
+          type="password"
+          id="register-password"
           formControlName="password"
-          placeholder="Minimum 4 caractères"
+          placeholder="Minimum 4 caracteres"
         >
         <span class="error" *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
-          Le mot de passe doit contenir au moins 4 caractères
+          Le mot de passe doit contenir au moins 4 caracteres
         </span>
       </div>
 
-      <button type="submit" [disabled]="registerForm.invalid" class="submit-btn">
+      <button type="submit" [disabled]="registerForm.invalid || isSubmitting" class="submit-btn">
         <i class="fas fa-user-plus"></i> S'inscrire
       </button>
     </form>
 
     <div class="auth-footer">
-      <p><i class="fas fa-shield-alt"></i> Vos données sont sécurisées</p>
+      <p><i class="fas fa-shield-alt"></i> Vos donnees sont securisees</p>
     </div>
   </div>
 </div>

@@ -1,10 +1,10 @@
 <div class="summary">
   <div class="summary-card">
-    <h3>Total des dépenses</h3>
-    <p class="total-amount">{{ totalExpenses | currency:'EUR':'symbol':'1.2-2' }}</p>
+    <h3>Total des depenses</h3>
+    <p class="total-amount">{{ totalExpenses | customCurrency }}</p>
   </div>
   <div class="summary-card">
-    <h3>Nombre de dépenses</h3>
+    <h3>Nombre de depenses</h3>
     <p class="count">{{ expenseCount }}</p>
   </div>
 </div>

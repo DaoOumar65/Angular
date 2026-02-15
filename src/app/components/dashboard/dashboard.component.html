@@ -1,82 +1,68 @@
-<div class="dashboard">
+﻿<div class="dashboard">
   <div class="dashboard-header">
     <h2><i class="fas fa-chart-line"></i> Vue d'ensemble</h2>
     <div class="period-selector">
-      <button 
-        [class.active]="selectedPeriod === 'day'"
-        (click)="setPeriod('day')"
-      >
+      <button [class.active]="selectedPeriod === 'day'" (click)="setPeriod('day')">
         <i class="fas fa-calendar-day"></i> Aujourd'hui
       </button>
-      <button 
-        [class.active]="selectedPeriod === 'month'"
-        (click)="setPeriod('month')"
-      >
-        <i class="fas fa-calendar-alt"></i> Ce mois
+      <button [class.active]="selectedPeriod === 'week'" (click)="setPeriod('week')">
+        <i class="fas fa-calendar-week"></i> Semaine
       </button>
-      <button 
-        [class.active]="selectedPeriod === 'year'"
-        (click)="setPeriod('year')"
-      >
-        <i class="fas fa-calendar"></i> Cette année
+      <button [class.active]="selectedPeriod === 'month'" (click)="setPeriod('month')">
+        <i class="fas fa-calendar-alt"></i> Mois
+      </button>
+      <button [class.active]="selectedPeriod === 'year'" (click)="setPeriod('year')">
+        <i class="fas fa-calendar"></i> Annee
       </button>
     </div>
   </div>
 
-  <!-- Cartes statistiques -->
+  <div class="budget-alert" [class.warning]="selectedPeriodStatus.status === 'warning'" [class.danger]="selectedPeriodStatus.status === 'danger'" *ngIf="selectedPeriod !== 'year' && selectedPeriodStatus.budgetAmount > 0">
+    <i class="fas" [class.fa-check-circle]="selectedPeriodStatus.status === 'safe'" [class.fa-exclamation-circle]="selectedPeriodStatus.status !== 'safe'"></i>
+    <span>
+      Budget {{ selectedPeriod }}: {{ selectedPeriodStatus.spentAmount | customCurrency }} / {{ selectedPeriodStatus.budgetAmount | customCurrency }}
+      ({{ selectedPeriodStatus.percentageUsed | number:'1.0-0' }}%)
+    </span>
+  </div>
+
   <div class="stats-grid">
     <div class="stat-card primary">
-      <div class="stat-icon">
-        <i class="fas fa-calendar-day"></i>
-      </div>
+      <div class="stat-icon"><i class="fas fa-calendar-day"></i></div>
       <div class="stat-content">
         <p class="stat-label">Aujourd'hui</p>
-        <h3 class="stat-value" [class.exceeded]="isDailyLimitExceeded()">{{ totalToday | customCurrency }}</h3>
-        <div *ngIf="dailyLimit > 0" class="limit-progress">
-          <div class="progress-bar">
-            <div class="progress-fill" [style.width.%]="dailyProgress" [class.exceeded]="isDailyLimitExceeded()"></div>
-          </div>
-          <span class="limit-text">{{ dailyProgress | number:'1.0-0' }}% de {{ dailyLimit | customCurrency }}</span>
-        </div>
+        <h3 class="stat-value">{{ totalToday | customCurrency }}</h3>
       </div>
     </div>
 
     <div class="stat-card success">
-      <div class="stat-icon">
-        <i class="fas fa-calendar-check"></i>
+      <div class="stat-icon"><i class="fas fa-calendar-week"></i></div>
+      <div class="stat-content">
+        <p class="stat-label">Cette semaine</p>
+        <h3 class="stat-value">{{ totalWeek | customCurrency }}</h3>
       </div>
+    </div>
+
+    <div class="stat-card warning">
+      <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
       <div class="stat-content">
         <p class="stat-label">Ce mois</p>
         <h3 class="stat-value">{{ totalMonth | customCurrency }}</h3>
       </div>
     </div>
 
-    <div class="stat-card warning">
-      <div class="stat-icon">
-        <i class="fas fa-chart-bar"></i>
-      </div>
-      <div class="stat-content">
-        <p class="stat-label">Cette année</p>
-        <h3 class="stat-value">{{ totalYear | customCurrency }}</h3>
-      </div>
-    </div>
-
     <div class="stat-card info">
-      <div class="stat-icon">
-        <i class="fas fa-receipt"></i>
-      </div>
+      <div class="stat-icon"><i class="fas fa-bullseye"></i></div>
       <div class="stat-content">
-        <p class="stat-label">Total dépenses</p>
-        <h3 class="stat-value">{{ expenseCount }}</h3>
+        <p class="stat-label">Prevision fin de mois</p>
+        <h3 class="stat-value">{{ forecastEndMonth | customCurrency }}</h3>
+        <p class="stat-hint">Epargne estimee: {{ estimatedSavings | customCurrency }}</p>
       </div>
     </div>
   </div>
 
-  <!-- Graphiques et statistiques -->
   <div class="charts-grid">
-    <!-- Dépenses par catégorie -->
     <div class="chart-card">
-      <h3><i class="fas fa-chart-pie"></i> Dépenses par catégorie</h3>
+      <h3><i class="fas fa-chart-pie"></i> Depenses par categorie</h3>
       <div *ngIf="categoryStats.length > 0" class="pie-chart-container">
         <svg viewBox="0 0 200 200" class="pie-chart">
           <ng-container *ngFor="let cat of categoryStats; let i = index">
@@ -105,20 +91,16 @@
       </div>
       <div *ngIf="categoryStats.length === 0" class="empty-state">
         <i class="fas fa-inbox"></i>
-        <p>Aucune dépense enregistrée</p>
+        <p>Aucune depense enregistree</p>
       </div>
     </div>
 
-    <!-- Tendance mensuelle -->
     <div class="chart-card">
-      <h3><i class="fas fa-chart-line"></i> Tendance des 6 derniers mois</h3>
+      <h3><i class="fas fa-chart-line"></i> Tendance 6 mois</h3>
       <div class="trend-chart">
         <div *ngFor="let item of monthlyTrend" class="trend-bar">
           <div class="bar-container">
-            <div 
-              class="bar" 
-              [style.height.%]="monthlyTrend.length > 0 ? (item.total / monthlyTrend[0].total || 1) * 100 : 0"
-            ></div>
+            <div class="bar" [style.height.%]="getTrendBarHeight(item.total)"></div>
           </div>
           <span class="bar-label">{{ item.month }}</span>
           <span class="bar-value">{{ item.total | customCurrency:0 }}</span>
@@ -127,3 +109,4 @@
     </div>
   </div>
 </div>
+

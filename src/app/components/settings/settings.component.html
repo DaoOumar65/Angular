@@ -1,58 +1,106 @@
-<div class="settings">
+﻿<div class="settings">
   <div class="settings-header">
-    <h2><i class="fas fa-cog"></i> Paramètres</h2>
+    <h2><i class="fas fa-cog"></i> Parametres</h2>
   </div>
 
   <div class="settings-section">
-    <h3><i class="fas fa-wallet"></i> Plafonds de budget</h3>
+    <h3><i class="fas fa-wallet"></i> Budget et epargne</h3>
     <div class="setting-item">
       <div class="setting-info">
-        <h4>Plafond journalier</h4>
-        <p>Définissez le montant maximum à ne pas dépasser par jour</p>
+        <h4>Budget journalier</h4>
+        <p>Montant maximum a depenser par jour</p>
       </div>
       <div class="input-group">
-        <input type="number" [(ngModel)]="dailyLimit" min="0" placeholder="0">
-        <button class="btn-primary" (click)="saveDailyLimit()">
-          <i class="fas fa-save"></i> Enregistrer
-        </button>
+        <input type="number" [(ngModel)]="dailyBudget" min="0" placeholder="0">
       </div>
     </div>
+    <div class="setting-item">
+      <div class="setting-info">
+        <h4>Budget hebdomadaire</h4>
+        <p>Montant maximum a depenser par semaine</p>
+      </div>
+      <div class="input-group">
+        <input type="number" [(ngModel)]="weeklyBudget" min="0" placeholder="0">
+      </div>
+    </div>
+    <div class="setting-item">
+      <div class="setting-info">
+        <h4>Budget mensuel</h4>
+        <p>Montant maximum a depenser par mois</p>
+      </div>
+      <div class="input-group">
+        <input type="number" [(ngModel)]="monthlyBudget" min="0" placeholder="0">
+      </div>
+    </div>
+    <div class="setting-item">
+      <div class="setting-info">
+        <h4>Objectif d epargne mensuel</h4>
+        <p>Montant cible a conserver a la fin du mois</p>
+      </div>
+      <div class="input-group">
+        <input type="number" [(ngModel)]="savingsGoal" min="0" placeholder="0">
+      </div>
+    </div>
+    <button class="btn-primary" (click)="saveBudgetSettings()">
+      <i class="fas fa-save"></i> Enregistrer budgets
+    </button>
   </div>
 
   <div class="settings-section">
-    <h3><i class="fas fa-database"></i> Données</h3>
+    <h3><i class="fas fa-database"></i> Donnees</h3>
     <div class="setting-item">
       <div class="setting-info">
-        <h4>Exporter les données</h4>
-        <p>Téléchargez toutes vos dépenses au format JSON</p>
+        <h4>Exporter JSON</h4>
+        <p>Telecharge toutes les donnees en JSON</p>
       </div>
       <button class="btn-primary" (click)="exportData()">
-        <i class="fas fa-download"></i> Exporter
+        <i class="fas fa-download"></i> Export JSON
       </button>
     </div>
     <div class="setting-item">
       <div class="setting-info">
-        <h4>Nombre de dépenses</h4>
-        <p>Total des transactions enregistrées</p>
+        <h4>Exporter CSV</h4>
+        <p>Telecharge les depenses en CSV</p>
+      </div>
+      <button class="btn-primary" (click)="exportCsv()">
+        <i class="fas fa-file-csv"></i> Export CSV
+      </button>
+    </div>
+    <div class="setting-item">
+      <div class="setting-info">
+        <h4>Importer JSON ou CSV</h4>
+        <p>Ajoute des depenses depuis un fichier</p>
+      </div>
+      <label class="btn-primary file-upload">
+        <i class="fas fa-upload"></i> Importer
+        <input type="file" accept=".json,.csv" (change)="importData($event)">
+      </label>
+    </div>
+    <div *ngIf="importStatus" class="message success">{{ importStatus }}</div>
+    <div *ngIf="importError" class="message error">{{ importError }}</div>
+    <div class="setting-item">
+      <div class="setting-info">
+        <h4>Nombre de depenses</h4>
+        <p>Total des transactions enregistrees</p>
       </div>
       <span class="badge">{{ totalExpenses }}</span>
     </div>
   </div>
 
   <div class="settings-section">
-    <h3><i class="fas fa-info-circle"></i> À propos</h3>
+    <h3><i class="fas fa-info-circle"></i> A propos</h3>
     <div class="about-card">
       <div class="about-item">
         <i class="fas fa-code"></i>
         <div>
           <h4>Version</h4>
-          <p>1.0.0</p>
+          <p>1.1.0</p>
         </div>
       </div>
       <div class="about-item">
         <i class="fas fa-calendar"></i>
         <div>
-          <h4>Dernière mise à jour</h4>
+          <h4>Derniere mise a jour</h4>
           <p>{{ currentDate | date:'dd/MM/yyyy' }}</p>
         </div>
       </div>
@@ -70,8 +118,8 @@
     <h3><i class="fas fa-exclamation-triangle"></i> Zone dangereuse</h3>
     <div class="setting-item">
       <div class="setting-info">
-        <h4>Supprimer toutes les données</h4>
-        <p>Cette action est irréversible. Toutes vos dépenses seront supprimées.</p>
+        <h4>Supprimer toutes les donnees</h4>
+        <p>Action irreversible.</p>
       </div>
       <button class="btn-danger" (click)="clearAllData()">
         <i class="fas fa-trash"></i> Tout supprimer
@@ -79,3 +127,4 @@
     </div>
   </div>
 </div>
+

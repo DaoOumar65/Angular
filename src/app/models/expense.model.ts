@@ -1,4 +1,4 @@
-export interface Expense {
+﻿export interface Expense {
   id: string;
   description: string;
   amount: number;
@@ -6,4 +6,5 @@ export interface Expense {
   date: Date;
 }
 
-export type ExpenseCategory = 'Alimentation' | 'Transport' | 'Loisirs' | 'Santé' | 'Logement' | 'Autre';
+export type ExpenseCategory = string;
+

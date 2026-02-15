@@ -1,4 +1,4 @@
-.analytics {
+﻿.analytics {
   padding: 2rem;
 }
 
@@ -63,6 +63,16 @@
 }
 
 .stat-box.comparison.negative h3 {
+  color: var(--danger-color);
+}
+
+.stat-box.positive i,
+.stat-box.positive h3 {
+  color: var(--success-color);
+}
+
+.stat-box.negative i,
+.stat-box.negative h3 {
   color: var(--danger-color);
 }
 
@@ -167,6 +177,7 @@
   height: 250px;
   display: flex;
   align-items: flex-end;
+  overflow: hidden;
 }
 
 .bar {
@@ -230,3 +241,4 @@
     overflow-x: auto;
   }
 }
+

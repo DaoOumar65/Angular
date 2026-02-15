@@ -1,16 +1,17 @@
 <aside class="sidebar">
   <div class="menu">
-    <div 
-      *ngFor="let item of menuItems" 
+    <a
+      *ngFor="let item of menuItems"
       class="menu-item"
-      [class.active]="isActive(item.id)"
-      (click)="selectMenu(item.id)"
+      [routerLink]="item.path"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
     >
       <i [class]="item.icon + ' menu-icon'"></i>
       <span class="menu-label">{{ item.label }}</span>
-    </div>
+    </a>
   </div>
-  
+
   <div class="sidebar-footer">
     <div class="quick-stats">
       <i class="fas fa-info-circle"></i>

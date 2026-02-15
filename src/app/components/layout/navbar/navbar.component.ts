@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { CurrencyService } from '../../../services/currency.service';
 import { AuthService } from '../../../services/auth.service';
 import { ThemeService } from '../../../services/theme.service';
@@ -16,7 +17,8 @@ export class NavbarComponent {
   constructor(
     public currencyService: CurrencyService,
     public authService: AuthService,
-    public themeService: ThemeService
+    public themeService: ThemeService,
+    private router: Router
   ) {}
 
   get currencies() {
@@ -31,18 +33,19 @@ export class NavbarComponent {
     return this.authService.getCurrentUser();
   }
 
-  changeCurrency(event: Event) {
+  async changeCurrency(event: Event) {
     const select = event.target as HTMLSelectElement;
-    this.currencyService.setCurrency(select.value);
+    await this.currencyService.setCurrency(select.value);
   }
 
-  logout() {
-    if (confirm('Voulez-vous vraiment vous déconnecter ?')) {
-      this.authService.logout();
+  async logout() {
+    if (confirm('Voulez-vous vraiment vous deconnecter ?')) {
+      await this.authService.logout();
+      this.router.navigateByUrl('/auth');
     }
   }
 
-  toggleTheme() {
-    this.themeService.toggleTheme();
+  async toggleTheme() {
+    await this.themeService.toggleTheme();
   }
 }

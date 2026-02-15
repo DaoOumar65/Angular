@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+﻿import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ExpenseService } from '../../services/expense.service';
@@ -30,16 +30,20 @@ export class CategoriesComponent {
 
   get filteredExpenses() {
     if (!this.selectedCategory) return [];
-    return this.expenseService.getExpenses()().filter(e => e.category === this.selectedCategory);
+    return this.expenseService.getExpenses()().filter((e) => e.category === this.selectedCategory);
   }
 
   selectCategory(category: string) {
     this.selectedCategory = this.selectedCategory === category ? null : category;
   }
 
-  addCategory() {
-    if (this.newCategoryName.trim()) {
-      this.categoryService.addCategory(this.newCategoryName.trim() as ExpenseCategory);
+  async addCategory() {
+    if (!this.newCategoryName.trim()) {
+      return;
+    }
+
+    const created = await this.categoryService.addCategory(this.newCategoryName.trim() as ExpenseCategory);
+    if (created) {
       this.newCategoryName = '';
       this.showAddForm = false;
     }
@@ -50,11 +54,20 @@ export class CategoriesComponent {
     this.editCategoryName = category;
   }
 
-  saveEdit() {
-    if (this.editingCategory && this.editCategoryName.trim()) {
-      this.categoryService.updateCategory(this.editingCategory, this.editCategoryName.trim() as ExpenseCategory);
+  async saveEdit() {
+    if (!this.editingCategory || !this.editCategoryName.trim()) {
+      return;
+    }
+
+    const updated = await this.categoryService.updateCategory(
+      this.editingCategory,
+      this.editCategoryName.trim() as ExpenseCategory
+    );
+
+    if (updated) {
       this.editingCategory = null;
       this.editCategoryName = '';
+      await this.expenseService.loadExpenses();
     }
   }
 
@@ -63,9 +76,19 @@ export class CategoriesComponent {
     this.editCategoryName = '';
   }
 
-  deleteCategory(category: ExpenseCategory) {
-    if (confirm(`Supprimer la catégorie "${category}" ?`)) {
-      this.categoryService.deleteCategory(category);
+  async deleteCategory(category: ExpenseCategory) {
+    if (!confirm(`Supprimer la categorie "${category}" ?`)) {
+      return;
+    }
+
+    const result = await this.categoryService.deleteCategory(category);
+    if (result.conflict) {
+      alert('Impossible de supprimer une categorie par defaut.');
+      return;
+    }
+
+    if (result.success) {
+      await this.expenseService.loadExpenses();
     }
   }
 
@@ -74,14 +97,6 @@ export class CategoriesComponent {
   }
 
   getCategoryIcon(category: string): string {
-    const icons: { [key: string]: string } = {
-      'Alimentation': 'fas fa-utensils',
-      'Transport': 'fas fa-car',
-      'Loisirs': 'fas fa-gamepad',
-      'Santé': 'fas fa-heartbeat',
-      'Logement': 'fas fa-home',
-      'Autre': 'fas fa-ellipsis-h'
-    };
-    return icons[category] || 'fas fa-circle';
+    return this.categoryService.getCategoryIcon(category);
   }
 }

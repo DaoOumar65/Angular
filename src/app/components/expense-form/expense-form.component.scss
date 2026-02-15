@@ -1,4 +1,4 @@
-.expense-form {
+﻿.expense-form {
   background: var(--bg-primary);
   padding: 1.5rem;
   border-radius: var(--border-radius-lg);
@@ -77,6 +77,12 @@ input::placeholder {
   gap: 0.5rem;
 }
 
+.help-text {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--gray-500);
+}
+
 button {
   padding: 0.875rem 1.5rem;
   background: var(--primary-color);
@@ -110,3 +116,4 @@ button:disabled {
   transform: none;
   color: var(--gray-500);
 }
+

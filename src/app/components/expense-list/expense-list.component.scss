@@ -1,4 +1,4 @@
-.expense-list {
+﻿.expense-list {
   background: var(--bg-primary);
   padding: 1.5rem;
   border-radius: var(--border-radius-lg);
@@ -23,7 +23,7 @@ h2 i {
 .filters {
   display: flex;
   gap: 1rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   flex-wrap: wrap;
 }
 
@@ -67,6 +67,20 @@ h2 i {
   border-color: var(--primary-color);
 }
 
+.reset-btn {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--gray-300);
+  border-radius: var(--border-radius-md);
+  background: var(--gray-100);
+  color: var(--gray-700);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.reset-btn:hover {
+  background: var(--gray-200);
+}
+
 .empty-state {
   text-align: center;
   padding: 3rem 2rem;
@@ -86,24 +100,6 @@ h2 i {
   max-height: 600px;
   overflow-y: auto;
   padding-right: 0.5rem;
-}
-
-.expenses::-webkit-scrollbar {
-  width: 6px;
-}
-
-.expenses::-webkit-scrollbar-track {
-  background: var(--gray-100);
-  border-radius: 10px;
-}
-
-.expenses::-webkit-scrollbar-thumb {
-  background: var(--gray-300);
-  border-radius: 10px;
-}
-
-.expenses::-webkit-scrollbar-thumb:hover {
-  background: var(--gray-400);
 }
 
 .expense-item {
@@ -156,29 +152,35 @@ h3 {
   font-weight: 600;
 }
 
-.category-badge.Alimentation { 
-  background: var(--warning-light); 
-  color: var(--warning-color); 
+.category-badge.Alimentation {
+  background: var(--warning-light);
+  color: var(--warning-color);
 }
-.category-badge.Transport { 
-  background: var(--info-light); 
-  color: var(--info-color); 
+
+.category-badge.Transport {
+  background: var(--info-light);
+  color: var(--info-color);
 }
-.category-badge.Loisirs { 
-  background: #FCE7F3; 
-  color: #BE185D; 
+
+.category-badge.Loisirs {
+  background: #fce7f3;
+  color: #be185d;
 }
-.category-badge.Santé { 
-  background: var(--success-light); 
-  color: var(--success-color); 
+
+.category-badge.Sante,
+.category-badge.Santé {
+  background: var(--success-light);
+  color: var(--success-color);
 }
-.category-badge.Logement { 
-  background: #EDE9FE; 
-  color: #7C3AED; 
+
+.category-badge.Logement {
+  background: #ede9fe;
+  color: #7c3aed;
 }
-.category-badge.Autre { 
-  background: var(--gray-200); 
-  color: var(--gray-600); 
+
+.category-badge.Autre {
+  background: var(--gray-200);
+  color: var(--gray-600);
 }
 
 .expense-details {
@@ -197,10 +199,6 @@ h3 {
   gap: 0.5rem;
 }
 
-.amount i {
-  font-size: 0.875rem;
-}
-
 .date {
   color: var(--gray-500);
   font-size: 0.875rem;
@@ -209,32 +207,15 @@ h3 {
   gap: 0.5rem;
 }
 
-.delete-btn {
-  background: var(--danger-light);
-  border: 1px solid var(--danger-color);
-  color: var(--danger-color);
-  font-size: 1rem;
-  cursor: pointer;
-  padding: 0.5rem 0.75rem;
-  border-radius: var(--border-radius-md);
-  transition: all var(--transition-normal);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.delete-btn:hover {
-  background: var(--danger-color);
-  color: white;
-  transform: scale(1.1);
-}
-
 .expense-actions {
   display: flex;
   gap: 0.5rem;
 }
 
-.edit-btn, .save-btn, .cancel-btn {
+.edit-btn,
+.save-btn,
+.cancel-btn,
+.delete-btn {
   padding: 0.5rem 0.75rem;
   border-radius: var(--border-radius-md);
   cursor: pointer;
@@ -251,20 +232,10 @@ h3 {
   color: var(--info-color);
 }
 
-.edit-btn:hover {
-  background: var(--info-color);
-  color: white;
-}
-
 .save-btn {
   background: var(--success-light);
   border: 1px solid var(--success-color);
   color: var(--success-color);
-}
-
-.save-btn:hover {
-  background: var(--success-color);
-  color: white;
 }
 
 .cancel-btn {
@@ -273,9 +244,10 @@ h3 {
   color: var(--gray-600);
 }
 
-.cancel-btn:hover {
-  background: var(--gray-400);
-  color: white;
+.delete-btn {
+  background: var(--danger-light);
+  border: 1px solid var(--danger-color);
+  color: var(--danger-color);
 }
 
 .expense-edit {
@@ -292,16 +264,32 @@ h3 {
   font-size: 0.9rem;
 }
 
-.expense-edit input:focus {
-  outline: none;
-  border-color: var(--primary-color);
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.page-btn {
+  border: 1px solid var(--gray-300);
+  border-radius: var(--border-radius-md);
+  background: var(--bg-primary);
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+}
+
+.page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 @media (max-width: 768px) {
   .expense-header {
     flex-wrap: wrap;
   }
-  
+
   .expense-details {
     flex-direction: column;
     align-items: flex-start;
@@ -309,3 +297,4 @@ h3 {
     padding-left: 0;
   }
 }
+

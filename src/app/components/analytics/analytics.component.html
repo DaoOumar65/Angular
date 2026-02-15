@@ -1,14 +1,13 @@
-<div class="analytics">
+﻿<div class="analytics">
   <div class="analytics-header">
-    <h2><i class="fas fa-chart-pie"></i> Analytiques détaillées</h2>
+    <h2><i class="fas fa-chart-pie"></i> Analytiques detaillees</h2>
   </div>
 
-  <!-- Statistiques globales -->
   <div class="stats-row">
     <div class="stat-box">
       <i class="fas fa-coins"></i>
       <div>
-        <p class="stat-label">Total dépensé</p>
+        <p class="stat-label">Total depense</p>
         <h3>{{ totalExpenses | customCurrency }}</h3>
       </div>
     </div>
@@ -22,22 +21,38 @@
     <div class="stat-box" *ngIf="highestCategory">
       <i [class]="getCategoryIcon(highestCategory.category)"></i>
       <div>
-        <p class="stat-label">Catégorie principale</p>
+        <p class="stat-label">Categorie principale</p>
         <h3>{{ highestCategory.category }}</h3>
       </div>
     </div>
     <div class="stat-box comparison" [class.positive]="comparison.change < 0" [class.negative]="comparison.change > 0">
       <i [class]="comparison.change < 0 ? 'fas fa-arrow-down' : 'fas fa-arrow-up'"></i>
       <div>
-        <p class="stat-label">vs mois précédent</p>
+        <p class="stat-label">vs mois precedent</p>
         <h3>{{ comparison.change | number:'1.0-1' }}%</h3>
       </div>
     </div>
   </div>
 
-  <!-- Répartition par catégorie -->
+  <div class="stats-row">
+    <div class="stat-box">
+      <i class="fas fa-bullseye"></i>
+      <div>
+        <p class="stat-label">Prevision fin de mois</p>
+        <h3>{{ forecastEndMonth | customCurrency }}</h3>
+      </div>
+    </div>
+    <div class="stat-box" [class.negative]="monthlyBudgetStatus.isOverBudget" [class.positive]="!monthlyBudgetStatus.isOverBudget">
+      <i [class]="monthlyBudgetStatus.isOverBudget ? 'fas fa-exclamation-triangle' : 'fas fa-check-circle'"></i>
+      <div>
+        <p class="stat-label">Budget mensuel</p>
+        <h3>{{ monthlyBudgetStatus.spentAmount | customCurrency }} / {{ monthlyBudgetStatus.budgetAmount | customCurrency }}</h3>
+      </div>
+    </div>
+  </div>
+
   <div class="chart-section">
-    <h3><i class="fas fa-percentage"></i> Répartition par catégorie</h3>
+    <h3><i class="fas fa-percentage"></i> Repartition par categorie</h3>
     <div class="category-breakdown">
       <div *ngFor="let cat of categoryStats" class="category-row">
         <div class="category-header">
@@ -55,18 +70,17 @@
       </div>
       <div *ngIf="categoryStats.length === 0" class="empty-state">
         <i class="fas fa-chart-pie"></i>
-        <p>Aucune donnée disponible</p>
+        <p>Aucune donnee disponible</p>
       </div>
     </div>
   </div>
 
-  <!-- Évolution sur 12 mois -->
   <div class="chart-section">
-    <h3><i class="fas fa-chart-line"></i> Évolution sur 12 mois</h3>
+    <h3><i class="fas fa-chart-line"></i> Evolution sur 12 mois</h3>
     <div class="monthly-chart">
       <div *ngFor="let item of monthlyTrend" class="month-bar">
         <div class="bar-wrapper">
-          <div class="bar" [style.height.%]="monthlyTrend.length > 0 ? (item.total / monthlyTrend[0].total || 1) * 100 : 0">
+          <div class="bar" [style.height.%]="getTrendBarHeight(item.total)">
             <span class="bar-tooltip">{{ item.total | customCurrency:0 }}</span>
           </div>
         </div>
@@ -74,4 +88,26 @@
       </div>
     </div>
   </div>
+
+  <div class="chart-section">
+    <h3><i class="fas fa-radar"></i> Depenses inhabituelles (30 jours)</h3>
+    <div class="category-breakdown">
+      <div *ngFor="let expense of anomalies" class="category-row">
+        <div class="category-header">
+          <i class="fas fa-exclamation-circle"></i>
+          <span class="category-name">{{ expense.description }}</span>
+          <span class="category-percentage">{{ expense.amount | customCurrency }}</span>
+        </div>
+        <div class="category-details">
+          <span>{{ expense.category }}</span>
+          <span>{{ expense.date | date:'dd/MM/yyyy' }}</span>
+        </div>
+      </div>
+      <div *ngIf="anomalies.length === 0" class="empty-state">
+        <i class="fas fa-check-circle"></i>
+        <p>Aucune anomalie detectee</p>
+      </div>
+    </div>
+  </div>
 </div>
+
